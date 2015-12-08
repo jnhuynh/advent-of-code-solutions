@@ -39,7 +39,7 @@ current = start
 
 graph = []
 
-houses_visted = 1
+houses_visited = 1
 
 input_file.each_char do |c|
   x = current.x
@@ -68,11 +68,11 @@ input_file.each_char do |c|
   end
 
   next_node.times_visited += 1
-  houses_visted += 1
+  houses_visited += 1
   current = next_node
 end
 
 input_file.close
 
 puts "New houses visited: #{graph.length}"
-puts "Houses visited: #{houses_visted}"
+puts "Houses visited: #{houses_visited}"
