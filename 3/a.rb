@@ -38,6 +38,7 @@ start.times_visited += 1
 current = start
 
 graph = []
+graph.push(start)
 
 houses_visited = 1
 
