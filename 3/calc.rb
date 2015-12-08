@@ -1,15 +1,28 @@
 #!/usr/bin/env ruby
 
+def find_in_graph(graph, x, y)
+  idx = graph.find_index do |n|
+    n.x == x && n.y == y
+  end
+
+  idx ? graph[idx] : nil
+end
+
 class Node
   attr_accessor :left
   attr_accessor :right
   attr_accessor :up
   attr_accessor :down
 
+  attr_accessor :x
+  attr_accessor :y
+
   attr_accessor :times_visited
 
   def initialize
     @times_visited = 0
+    @x = 0
+    @y = 0
   end
 end
 
@@ -18,72 +31,48 @@ down = 'v'
 left = '<'
 right = '>'
 
-input_file = File.open('input2.txt')
+input_file = File.open('input.txt')
 
 start = Node.new
 start.times_visited += 1
 current = start
 
-new_houses_visted = 1
+graph = []
+
 houses_visted = 1
 
 input_file.each_char do |c|
+  x = current.x
+  y = current.y
   case c
   when up
-    if current.up
-      puts "up"
-      next_node = current.up
-    else
-      puts "new up"
-      next_node = Node.new
-      next_node.down = current
-      current.up = next_node
-    end
+    y += 1
   when down
-    if current.down
-      puts "down"
-      next_node = current.down
-    else
-      puts "new down"
-      next_node = Node.new
-      next_node.up = current
-      current.down = next_node
-    end
+    y -= 1
   when left
-    if current.left
-      puts "left"
-      next_node = current.left
-    else
-      puts "new left"
-      next_node = Node.new
-      next_node.right = current
-      current.left = next_node
-    end
+    x -= 1
   when right
-    if current.right
-      puts "left"
-      next_node = current.right
-    else
-      puts "new right"
-      next_node = Node.new
-      next_node.left = current
-      current.right = next_node
-    end
+    x += 1
   else
     next
   end
 
-  if next_node.times_visited == 0
-    new_houses_visted += 1
+  next_node = find_in_graph(graph, x, y)
+
+  if !next_node
+    next_node = Node.new
+    next_node.x = x
+    next_node.y = y
+
+    graph.push(next_node)
   end
 
   next_node.times_visited += 1
   houses_visted += 1
-  puts houses_visted
   current = next_node
 end
 
 input_file.close
 
-puts "New houses visited: #{new_houses_visted}"
+puts "New houses visited: #{graph.length}"
 puts "Houses visited: #{houses_visted}"
