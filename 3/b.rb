@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+def is_even(n)
+  n % 2 == 0
+end
+
 def find_in_graph(graph, x, y)
   idx = graph.find_index do |n|
     n.x == x && n.y == y
@@ -35,16 +39,20 @@ input_file = File.open('input.txt')
 
 start = Node.new
 start.times_visited += 1
-current1 = start
-current2 = start
+robo_current = start
+santa_current = start
 
 graph = []
+graph.push(start)
 
 houses_visited = 1
 
 input_file.each_char do |c|
+  current = is_even(houses_visited) ? robo_current : santa_current
+
   x = current.x
   y = current.y
+
   case c
   when up
     y += 1
@@ -69,8 +77,14 @@ input_file.each_char do |c|
   end
 
   next_node.times_visited += 1
+
+  if is_even(houses_visited)
+    robo_current = next_node
+  else
+    santa_current = next_node
+  end
+
   houses_visited += 1
-  current = next_node
 end
 
 input_file.close
